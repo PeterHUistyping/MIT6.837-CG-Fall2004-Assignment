@@ -16,7 +16,7 @@ Assignment0: [**Very Interesting!**]
     Barnsley fern\dargon\X\Triangle\Levy
 
 A glimpse of it ⬇
-：![image](https://github.com/PeterHUistyping/MIT6.837-CG-Fall2004-Assignment/blob/main/MyProject/assignment0_Barnsley%20fern/Self-similar%20fractals.png)
+；![image](https://github.com/PeterHUistyping/MIT6.837-CG-Fall2004-Assignment/blob/main/MyProject/assignment0_Barnsley%20fern/Self-similar%20fractals.png)
 ![image](MyProject/assignment0_Barnsley%20fern/Self-similar%20fractals.png)
 
 
