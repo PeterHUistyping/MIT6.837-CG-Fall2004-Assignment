@@ -1,0 +1,8 @@
+{
+    "files.associations": {
+        "main.C": "cpp",
+        "ifs.C": "cpp",
+        "image.C": "cpp",
+        "matrix.C": "cpp"
+    }
+}
