@@ -31,7 +31,8 @@ A glimpse of it ⬇
 
 ![Depth](MyProject/assignment1_Sphere-Ray/Sphere-depth.png)
 
-*scene1_07.txt sample output wrong（use scene1_08.txt，camera center 0,0,2 instead）
+*scene1_07.txt sample output wrong* \
+（Use scene1_08.txt，camera center 0,0,2 instead）\
 Proved by linking two sphere function, which turns out to be an oval on XOY.
 
 
