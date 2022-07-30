@@ -33,7 +33,7 @@ A glimpse of it ⬇
 
 *scene1_07.txt sample output wrong* \
 （Use scene1_08.txt，camera center 0,0,2 instead）\
-Proved by linking two sphere function, which turns out to be an oval on XOY.
+Proved by linking two sphere functions, which turn out to be an oval on plane XOY.
 
 
 ## Setup the MyProject
