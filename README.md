@@ -1,6 +1,6 @@
 # MIT6.837-CG-Fall2004-Assignment
 ### Computer Graphics
-![image](https://github.com/PeterHUistyping/MIT6.837-CG-Fall2004-Assignment/blob/main/MyProject/assignment0_Barnsley%20fern/Self-similar%20fractals.png)
+![Self-similar fractals](https://github.com/PeterHUistyping/MIT6.837-CG-Fall2004-Assignment/blob/main/MyProject/assignment0_Barnsley%20fern/Self-similar%20fractals.png)
 
 ## Lesson Material
 Course Calendar:
@@ -15,9 +15,24 @@ Assignment0: [**Very Interesting!**]
 
     Self-similar fractals (a subpart of the object is similar to the whole) 
     Barnsley fern\dargon\X\Triangle\Levy
+    IFS Function
 
 A glimpse of it ⬇
-![image](MyProject/assignment0_Barnsley%20fern/Self-similar%20fractals.png)
+![Self-similar fractals](MyProject/assignment0_Barnsley%20fern/Self-similar%20fractals.png)
+
+Assignment1: [Ray Casting]
+
+    Sphere-Ray Intersection-(Geometric/Algebraic)  
+    Orthonormal Basis - from Linear Algebra
+    C++ Object Oriented Programming
+
+A glimpse of it ⬇
+![Sphere](MyProject/assignment1_Sphere-Ray/Sphere.png)
+
+![Depth](MyProject/assignment1_Sphere-Ray/Sphere-depth.png)
+
+*scene1_07.txt sample output wrong（use scene1_08.txt，camera center 0,0,2 instead）
+Proved by linking two sphere function, which turns out to be an oval on XOY.
 
 
 ## Setup the MyProject

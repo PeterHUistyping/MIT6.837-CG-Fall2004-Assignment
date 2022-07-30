@@ -14,7 +14,7 @@ public:
 
   // CONSTRUCTORS & DESTRUCTOR
   Material(const Vec3f &d_color) { diffuseColor = d_color; }
-  virtual ~Material() {}
+  virtual ~Material() {}  //for base 
 
   // ACCESSORS
   virtual Vec3f getDiffuseColor() const { return diffuseColor; }

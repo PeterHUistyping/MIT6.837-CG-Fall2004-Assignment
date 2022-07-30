@@ -1,0 +1,8 @@
+{
+    "files.associations": {
+        "main.C": "cpp",
+        "matrix.C": "cpp",
+        "image.C": "cpp",
+        "scene_parser.C": "cpp"
+    }
+}

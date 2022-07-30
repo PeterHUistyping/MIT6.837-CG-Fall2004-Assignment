@@ -1,0 +1,30 @@
+{
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "C/C++: clang++ build and debug active file",
+            "type": "cppdbg",
+            "request": "launch",
+            "program": "${fileDirname}/${fileBasenameNoExtension}",
+            "args": [
+                "-input", 
+                "scene1_1.txt", 
+                "-size", 
+                "200",
+                "200", 
+                "-output", 
+                "output1_1.tga", 
+                "-depth", 
+                "9",
+                "10", 
+                "depth1_1.tga"
+            ],
+            "stopAtEntry": false,
+            "cwd": "${fileDirname}",
+            "environment": [],
+            "externalConsole": false,
+            "MIMode": "lldb",
+            "preLaunchTask": "C/C++: clang++ build active file"
+        }
+    ]
+}
