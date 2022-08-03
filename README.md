@@ -11,7 +11,7 @@ The folder includes the following, which are downloaded from the Course website\
 *2.Original Assignments, including PDF task requirement and supporting code.*
 
 ## Project Introduction
-Assignment0: [**Very Interesting!**]
+#### Assignment0: [**Very Interesting!**]
 
     Self-similar fractals (a subpart of the object is similar to the whole) 
     Barnsley fern\dargon\X\Triangle\Levy
@@ -20,7 +20,7 @@ Assignment0: [**Very Interesting!**]
 A glimpse of it ⬇
 ![Self-similar fractals](MyProject/assignment0_Barnsley%20fern/Self-similar%20fractals.png)
 
-Assignment1: [Ray Casting]
+#### Assignment1: [Ray Casting]
 
     Sphere-Ray Intersection-(Geometric/Algebraic)  
     Orthonormal Basis - from Linear Algebra
@@ -31,10 +31,23 @@ A glimpse of it ⬇
 
 ![Depth](MyProject/assignment1_Sphere-Ray/Sphere-depth.png)
 
-*scene1_07.txt sample output wrong* \
+*scene1_07.txt sample output is wrong* \
 （Use scene1_08.txt，camera center 0,0,2 instead）\
 Proved by linking two sphere functions, which turn out to be an oval on plane XOY.
 
+#### Assignment2: [Ray Tracing]
+
+    NormalVisualization/ DiffuseShading
+    Perspective Camera
+    New primitives- Planes & Triangles
+    Affine Transformations 
+
+![Sphere with Normal Visualization & Diffuse Coloring](MyProject/assignment2_Tri-Ray/Raytracing1.png)
+![Planes & Triangles](MyProject/assignment2_Tri-Ray/Raytracing2.png)
+![TriangleMesh](MyProject/assignment2_Tri-Ray/Raytracing3.png)
+![Transformations](MyProject/assignment2_Tri-Ray/Raytracing4.png)
+
+"-shade_back" to be continued.
 
 ## Setup the MyProject
 *Notice that .C = .cpp (at least in VScode)
