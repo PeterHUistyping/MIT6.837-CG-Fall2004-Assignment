@@ -42,15 +42,60 @@ Proved by linking two sphere functions, which turn out to be an oval on plane XO
     New primitives- Planes & Triangles
     Affine Transformations 
 
+A glimpse of it ⬇
 ![Sphere with Normal Visualization & Diffuse Coloring](MyProject/assignment2_Tri-Ray/Raytracing1.png)
 ![Planes & Triangles](MyProject/assignment2_Tri-Ray/Raytracing2.png)
 ![TriangleMesh](MyProject/assignment2_Tri-Ray/Raytracing3.png)
 ![Transformations](MyProject/assignment2_Tri-Ray/Raytracing4.png)
 
-"-shade_back" to be continued.
+"-shade_back" to be updated.
+
+#### Assignment3: [Open GL]
+
+    OpenGL API - 3D Simulation
+    Sphere Tessellation & Gouraud interpolation
+    Specular Color
+    
+A glimpse of it ⬇
+![OpenGL Display 1](MyProject/assignment3_Open-GL/OpenGL1.png)
+![OpenGL Display 2](MyProject/assignment3_Open-GL/OpenGL2.png)
+![OpenGL Display 3](MyProject/assignment3_Open-GL/OpenGL3.png)
+ 
+Guidance:
+*Within the real-time interface*\
+ Calling the render function by pressing 'r'.\
+ The application can be terminated by pressing 'q' or calling exit().*
+
+*Adjustment
+Some head files in ray folder is being cut to Object3D folder.\
+Codes have been revised.
+
+Command Line Argument: in/... out/...\
+Set the vertex normal before specifying each vertex position\
+Blinn-Phong Model the exponent->100 (nonlinear relationship)
+
 
 ## Setup the MyProject
 *Notice that .C = .cpp (at least in VScode)
+
+From Assignment3 onwards, include the below header Files on Mac instead.
+    
+    #define GL_SILENCE_DEPRECATION
+    // Defined before OpenGL and GLUT includes to avoid deprecation messages 
+    #include <OpenGL/gl.h> 
+    #include <OpenGL/glu.h> 
+    #include <GLUT/glut.h> 
+
+    In task.json
+        "-framework" ,"GLUT"," -framework", "OpenGL"
+
+    Add glutInit(&argc, argv); in main
+        change glEnable() etc after glutCreateWindow("OpenGL Viewer");
+
+    *Adjustment
+    In addition, some head files in ray folder is being cut to Object3D folder.\
+    Codes have been revised.
+
 ### Using VSCode C++ 
 Using my code (on Mac Clang++)\
 Note that you should open the Myproject folder,\

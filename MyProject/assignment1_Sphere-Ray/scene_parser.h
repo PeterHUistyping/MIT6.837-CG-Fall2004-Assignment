@@ -15,25 +15,26 @@ class Sphere;
 // ====================================================================
 // ====================================================================
 
-class SceneParser {
+class SceneParser
+{
 
 public:
-
   // CONSTRUCTOR & DESTRUCTOR
   SceneParser(const char *filename);
   ~SceneParser();
 
   // ACCESSORS
-  Camera* getCamera() const { return camera; }
+  Camera *getCamera() const { return camera; }
   Vec3f getBackgroundColor() const { return background_color; }
   int getNumMaterials() const { return num_materials; }
-  Material* getMaterial(int i) const { 
-    assert(i >= 0 && i < num_materials); 
-    return materials[i]; }  
-  Group* getGroup() const { return group; }
+  Material *getMaterial(int i) const
+  {
+    assert(i >= 0 && i < num_materials);
+    return materials[i];
+  }
+  Group *getGroup() const { return group; }
 
 private:
-
   SceneParser() { assert(0); } // don't use
 
   // PARSING
@@ -41,11 +42,11 @@ private:
   void parseOrthographicCamera();
   void parseBackground();
   void parseMaterials();
-  Material* parseMaterial();
+  Material *parseMaterial();
 
-  Object3D* parseObject(char token[MAX_PARSER_TOKEN_LENGTH]);
-  Group* parseGroup();
-  Sphere* parseSphere();
+  Object3D *parseObject(char token[MAX_PARSER_TOKEN_LENGTH]);
+  Group *parseGroup();
+  Sphere *parseSphere();
 
   // HELPER FUNCTIONS
   int getToken(char token[MAX_PARSER_TOKEN_LENGTH]);
