@@ -8,10 +8,6 @@
 class Group : public Object3D
 {
 public:
-    // int n;
-    // vector <Object3D> group(n);
-    int numObjects;
-    Object3D **group; // pointer ->NULL  Object3D* [num] num-1000
     ~Group()
     {
         delete[] group;
@@ -33,7 +29,6 @@ public:
             if (group[i]->intersect(r, h, tmin))
                 inter = true, count++;
         }
-        // cout<<"from group.h"<<count<<endl;
         return inter;
     }
 
@@ -41,5 +36,20 @@ public:
     {
         group[index] = obj;
     }
+
+    void paint(void)
+    {
+        for (int i = 0; i < numObjects; i++)
+        {
+
+            group[i]->paint();
+        }
+    }
+
+private: // int n;
+    // vector <Object3D> group(n);
+    int numObjects;
+    Object3D **group; // pointer ->NULL  Object3D* [num] num-1000
 };
+
 #endif

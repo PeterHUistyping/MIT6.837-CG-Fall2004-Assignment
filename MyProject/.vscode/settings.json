@@ -12,7 +12,15 @@
         "string": "cpp",
         "string_view": "cpp",
         "iterator": "cpp",
-        "glCanvas.C": "cpp"
+        "glCanvas.C": "cpp",
+        "test.C": "cpp",
+        "algorithm": "cpp",
+        "camera.C": "cpp",
+        "material.C": "cpp",
+        "h.C": "cpp",
+        "ratio": "cpp",
+        "complex": "cpp",
+        "rayTree.C": "cpp"
     },
     "C_Cpp.errorSquiggles": "Disabled",
     "C_Cpp.dimInactiveRegions": false

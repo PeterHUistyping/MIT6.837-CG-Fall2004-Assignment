@@ -22,7 +22,7 @@ public:
   Matrix(const Matrix &m);
   Matrix(const float *m);
   ~Matrix() {}
-  void Clear();
+
   // ACCESSORS
   float *glGet(void) const
   {
@@ -60,6 +60,7 @@ public:
     data[y][x] = v;
   }
   void SetToIdentity();
+  void Clear();
 
   void Transpose(Matrix &m) const;
   void Transpose() { Transpose(*this); }

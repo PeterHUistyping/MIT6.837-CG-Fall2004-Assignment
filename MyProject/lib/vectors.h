@@ -1,3 +1,4 @@
+
 #ifndef _VECTORS_H_
 #define _VECTORS_H_
 
@@ -717,6 +718,7 @@ public:
   {
     fprintf(F, "%f %f %f %f\n", data[0], data[1], data[2], data[3]);
   }
+  friend Vec4f &operator*=(Vec4f &v, Matrix &m); // supplememt
 
 private:
   friend class Matrix;
