@@ -48,7 +48,7 @@ A glimpse of it ⬇
 ![TriangleMesh](MyProject/assignment2_Tri-Ray/Raytracing3.png)
 ![Transformations](MyProject/assignment2_Tri-Ray/Raytracing4.png)
 
-"-shade_back" to be updated.
+"-shade_back" to be updated. ✅ Done on Assignment4
 
 #### Assignment3: [Open GL]
 
