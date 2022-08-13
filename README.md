@@ -54,6 +54,7 @@ A glimpse of it ⬇
 
     OpenGL API - 3D Simulation
     Sphere Tessellation & Gouraud interpolation
+    DirectionalLight
     Specular Color
     
 A glimpse of it ⬇
@@ -74,6 +75,23 @@ Command Line Argument: in/... out/...\
 Set the vertex normal before specifying each vertex position\
 Blinn-Phong Model the exponent->100 (nonlinear relationship)
 
+#### Assignment4: [Ray Tracer]
+
+    Shadows Reflection & Refraction
+    OpenGL API Representation
+    PointLight
+
+A glimpse of it ⬇
+![Ray Tracer](MyProject/assignment4_Ray-Tracer/RayTracer.png)
+![Ray Tracer BUG](MyProject/assignment4_Ray-Tracer/RayTracerBUG.png)
+ 
+*Adjustment
+Tessellation args can be controlled by Command Line Arguments.
+On Main.C 
+    a new pointer to SceneParser -> no need for function arg 
+                                 -> openGL rendering enabled. (camera adjusted)
+On raytrace.h  
+    main loop raycasting has been transferred here.
 
 ## Setup the MyProject
 *Notice that .C = .cpp (at least in VScode)
