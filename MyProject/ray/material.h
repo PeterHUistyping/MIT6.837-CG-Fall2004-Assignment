@@ -4,7 +4,7 @@
 #include "vectors.h"
 #include "ray.h"
 #include "hit.h"
-extern bool shadeback;
+#include "extern.h"
 // ====================================================================
 // ====================================================================
 
@@ -44,6 +44,7 @@ public:
   PhongMaterial()
   {
   }
+  PhongMaterial(const Vec3f &d_color) { diffuseColor = d_color; }
   PhongMaterial(const Vec3f &d_color, const Vec3f &s_color, float e)
   {
     diffuseColor = d_color;

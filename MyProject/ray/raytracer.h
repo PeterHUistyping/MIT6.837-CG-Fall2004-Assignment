@@ -2,31 +2,39 @@
 #define _RAYTRACER_H_
 #include "scene_parser.h"
 #include "rayTree.h"
-extern float epsilon;
-extern bool shadeback;
-extern float epsilon_shadow;
+#include "grid.h"
+#include "extern.h"
 class RayTracer
 {
 public:
-    RayTracer()
-    {
-    }
-    RayTracer(SceneParser *s, int max_b, float cutoff_wt, bool shad)
+    RayTracer() {}
+    RayTracer(SceneParser *s, int max_b, float cutoff_wt, bool shad, Grid *grid)
     {
         parser = s;
         max_bounces = max_b;
         cutoff_weight = cutoff_wt;
         shadows = shad;
+        this->grid = grid; // has been initialized
+        if (grid != NULL)
+        {
+            parser->getGroup()->insertIntoGrid(grid, NULL);
+        }
     }
-    ~RayTracer() {}
-    Vec3f mirrorDirection(const Vec3f &normal, const Vec3f &incoming)
+    ~RayTracer()
+    {
+        delete[] parser;
+        parser = nullptr;
+        delete[] grid;
+        grid = nullptr;
+    }
+    Vec3f mirrorDirection(const Vec3f &normal, const Vec3f &incoming) const
     {
         Vec3f out;
         out = incoming - 2 * normal.Dot3(incoming) * normal;
         out.Normalize();
         return out;
     }
-    bool transmittedDirection(const Vec3f &normal, const Vec3f &incoming, float index_i, float index_t, Vec3f &transmitted)
+    bool transmittedDirection(const Vec3f &normal, const Vec3f &incoming, float index_i, float index_t, Vec3f &transmitted) const
     {
         float nr, cosi, sini;
         nr = index_i / index_t;
@@ -46,8 +54,18 @@ public:
         Vec3f pcolor;                                         // point_color
         if (bounces > max_bounces || weight <= cutoff_weight) // end of recursion
             return pcolor;
-        RayTracer tracer_temp;
-        if (parser->getGroup()->intersect(ray, hit, epsilon_shadow)) // parser->getCamera()->getTMin()
+        // RayTracer tracer_temp;
+        Object3D *pointer_Obj;
+        if (visualize_grid)
+        {
+            pointer_Obj = grid;
+            // ointer_Obj = parser->getGroup();
+        }
+        else
+        {
+            pointer_Obj = parser->getGroup();
+        }
+        if (pointer_Obj->intersect(ray, hit, epsilon_shadow)) // parser->getCamera()->getTMin()
         {
             Vec3f am = parser->getAmbientLight();
             am = am * hit.getMaterial()->getDiffuseColor();
@@ -86,7 +104,7 @@ public:
                 }
                 assert(fabs(normal.Length() - 1) < 1e-6);
                 assert(fabs(ray.getDirection().Length() - 1) < 1e-6);
-                Vec3f out = tracer_temp.mirrorDirection(normal, ray.getDirection());
+                Vec3f out = this->mirrorDirection(normal, ray.getDirection());
                 Ray ray_out(hit.getIntersectionPoint(), out);
                 Hit h;
                 pcolor += traceRay(ray_out, epsilon, bounces + 1, weight, indexOfRefraction, h) * hit.getMaterial()->getReflectiveColor();
@@ -106,7 +124,7 @@ public:
                         if (hit.getNormal().Dot3(ray.getDirection()) > 0)
                             normal.Negate(); // back shading
                     }
-                    if (tracer_temp.transmittedDirection(normal, ray.getDirection(), 1, indexOfRefraction, transmitted))
+                    if (this->transmittedDirection(normal, ray.getDirection(), 1, indexOfRefraction, transmitted))
                     {
                         Ray ray_out(hit.getIntersectionPoint(), transmitted);
                         Hit h;
@@ -123,7 +141,7 @@ public:
                         if (hit.getNormal().Dot3(ray.getDirection()) > 0)
                             normal.Negate(); // back shading
                     }
-                    if (tracer_temp.transmittedDirection(normal, ray.getDirection(), indexOfRefraction, 1, transmitted))
+                    if (this->transmittedDirection(normal, ray.getDirection(), indexOfRefraction, 1, transmitted))
                     {
                         Ray ray_out(hit.getIntersectionPoint(), transmitted);
                         Hit h;
@@ -148,5 +166,6 @@ private:
     int max_bounces;
     float cutoff_weight;
     bool shadows;
+    Grid *grid;
 };
 #endif

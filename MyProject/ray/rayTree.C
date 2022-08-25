@@ -12,6 +12,8 @@ Segment RayTree::main_segment;
 SegmentVector RayTree::shadow_segments;
 SegmentVector RayTree::reflected_segments;
 SegmentVector RayTree::transmitted_segments;
+CellFaceVector RayTree::hit_cells;
+CellFaceVector RayTree::entered_faces;
 
 // ====================================================================
 
@@ -61,7 +63,6 @@ void RayTree::paintHelper(const Vec4f &m, const Vec4f &s, const Vec4f &r, const 
 
 void RayTree::paint()
 {
-
   glLineWidth(2);
   glDisable(GL_LIGHTING);
 
@@ -69,21 +70,43 @@ void RayTree::paint()
   // turn off the depth test and blend with the current pixel color
   glDisable(GL_DEPTH_TEST);
   glEnable(GL_BLEND);
-  glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_DST_COLOR);
-  paintHelper(Vec4f(0.5, 0.5, 0.5, 0.4),
-              Vec4f(0.1, 0.9, 0.1, 0.4),
-              Vec4f(0.9, 0.1, 0.1, 0.4),
-              Vec4f(0.1, 0.1, 0.9, 0.4));
+  glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+  paintHelper(Vec4f(0.7, 0.7, 0.7, 0.3),
+              Vec4f(0.1, 0.9, 0.1, 0.3),
+              Vec4f(0.9, 0.1, 0.1, 0.3),
+              Vec4f(0.1, 0.1, 0.9, 0.3));
   glDisable(GL_BLEND);
   glEnable(GL_DEPTH_TEST);
 
   // with the depth test enabled, draw the lines solid
-  paintHelper(Vec4f(0.5, 0.5, 0.5, 1.0),
+  paintHelper(Vec4f(0.7, 0.7, 0.7, 1.0),
               Vec4f(0.1, 0.9, 0.1, 1.0),
               Vec4f(0.9, 0.1, 0.1, 1.0),
               Vec4f(0.1, 0.1, 0.9, 1.0));
 
   glEnable(GL_LIGHTING);
+}
+
+// ====================================================================
+
+void RayTree::paintHitCells()
+{
+  // paint the affected cells!
+  for (int i = 0; i < hit_cells.getNumCellFaces(); i++)
+  {
+    hit_cells.getCellFace(i).paint();
+  }
+}
+
+// ====================================================================
+
+void RayTree::paintEnteredFaces()
+{
+  // paint the entered faces
+  for (int i = 0; i < entered_faces.getNumCellFaces(); i++)
+  {
+    entered_faces.getCellFace(i).paint();
+  }
 }
 
 // ====================================================================

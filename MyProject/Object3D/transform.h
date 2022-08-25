@@ -6,13 +6,75 @@ void GetVec3f(Vec3f &p, Vec4f &v);
 class Transform : public Object3D
 {
 public:
-    ~Transform() {}
+    ~Transform()
+    {
+        delete[] m;
+        m = nullptr;
+        delete[] box;
+        box = nullptr;
+        delete[] object;
+        object = nullptr;
+    }
     Transform(Matrix &m, Object3D *o)
     {
         matrix = m;
         object = o;
-    }
+        if (object->getBoundingBox() != NULL)
+        {
+            box = o->getBoundingBox();
+            Vec3f min_ = box->getMin();
+            Vec3f max_ = box->getMax();
+            Vec3f v = min_; // 1
+            matrix.Transform(v);
+            box = new BoundingBox(v, v);
 
+            v = Vec3f(min_.x(), min_.y(), max_.z());
+            matrix.Transform(v);
+            box->Extend(v);
+
+            v = Vec3f(min_.x(), max_.y(), max_.z());
+            matrix.Transform(v);
+            box->Extend(v);
+
+            v = Vec3f(min_.x(), max_.y(), min_.z());
+            matrix.Transform(v);
+            box->Extend(v);
+
+            v = Vec3f(max_.x(), max_.y(), min_.z());
+            matrix.Transform(v);
+            box->Extend(v);
+
+            v = Vec3f(max_.x(), min_.y(), max_.z());
+            matrix.Transform(v);
+            box->Extend(v);
+
+            v = Vec3f(max_.x(), min_.y(), min_.z());
+            matrix.Transform(v);
+            box->Extend(v);
+
+            v = max_;
+            matrix.Transform(v);
+            box->Extend(v);
+        }
+    }
+    BoundingBox *getBoundingBox()
+    {
+        return box;
+    }
+    void insertIntoGrid(Grid *g, Matrix *m)
+    {
+        Matrix new_;
+        if (m != NULL)
+        {
+            new_ = (*m) * matrix;
+            m = &new_;
+        }
+        else
+        {
+            m = &matrix;
+        }
+        object->insertIntoGrid(g, m);
+    }
     bool intersect(const Ray &r, Hit &h, float tmin)
     {
         bool inter = false;

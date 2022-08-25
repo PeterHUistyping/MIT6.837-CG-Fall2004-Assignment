@@ -3,19 +3,66 @@
 
 #include "object3d.h"
 #include "camera.h"
+#include "grid.h"
 #include <math.h>
-extern bool isgouraud;
-extern float P_steps, T_steps;
+#include "extern.h"
 class Sphere : public Object3D
 {
 public:
     Sphere() {}
-    ~Sphere() {}
     Sphere(const Vec3f &c, const float &rad, Material *mat)
     {
         center = c;
         radius = rad;
         m = mat;
+        Vec3f N(1, 1, 1);
+        Vec3f Left = center - N * radius;
+        Vec3f Right = center + N * radius;
+        box = new BoundingBox(Left, Right); // exist later
+    }
+    ~Sphere()
+    {
+        delete[] m;
+        m = nullptr;
+        delete[] box;
+        box = nullptr;
+    }
+    BoundingBox *getBoundingBox()
+    {
+        return box;
+    }
+
+    void insertIntoGrid(Grid *g, Matrix *m)
+    {
+        Vec3f increment = g->getincrement_halfCell();
+        float x = increment.x(), y = increment.y(), z = increment.z();
+        float fix_ = sqrt(x * x + y * y + z * z);
+        for (int i = 0; i < g->nx; i++)
+        {
+            for (int j = 0; j < g->ny; j++)
+            {
+                for (int k = 0; k < g->nz; k++)
+                {
+                    Vec3f center_ = center;
+                    float radius_ = radius;
+                    if (m != NULL)
+                    {
+                        m_ = m;
+                        m->Transform(center_);
+                        Vec3f a(1, 0, 0), b(0, 1, 0), c(0, 0, 1);
+                        m->TransformDirection(a);
+                        m->TransformDirection(b);
+                        m->TransformDirection(c);
+                        radius_ *= max(a.Length(), max(b.Length(), c.Length())); // conservative
+                    }
+                    if ((g->getCenterPosition(i, j, k) - center_).Length() <= radius_ + fix_)
+                    {
+                        // g->array[i][j][k] = true; // add+  no need to else false
+                        g->array_obj[i][j][k].addObject(this);
+                    }
+                }
+            }
+        }
     }
     bool intersectG(const Ray &r, Hit &h, float tmin)
     {

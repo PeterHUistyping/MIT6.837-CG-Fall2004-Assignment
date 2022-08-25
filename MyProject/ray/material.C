@@ -6,6 +6,7 @@
 // include glCanvas.h to access the preprocessor variable SPECULAR_FIX
 #include "glCanvas.h"
 #include "material.h"
+#include "extern.h"
 #define GL_SILENCE_DEPRECATION
 // Defined before OpenGL and GLUT includes to avoid deprecation messages
 #include <OpenGL/gl.h>
@@ -14,7 +15,7 @@
 #ifdef SPECULAR_FIX
 // OPTIONAL:  global variable allows (hacky) communication
 // with glCanvas::display
-extern int SPECULAR_FIX_WHICH_PASS;
+
 #endif
 
 // ====================================================================

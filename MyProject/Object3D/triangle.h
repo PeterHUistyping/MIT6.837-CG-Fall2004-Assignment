@@ -3,6 +3,7 @@
 
 #include "object3d.h"
 #include "camera.h"
+#include "grid.h"
 #include <math.h>
 
 class Triangle : public Object3D
@@ -16,10 +17,57 @@ public:
         normal.Normalize();
         // normal.Write(); // debug
         // cautious:bb&cc have been modified.
+        Vec3f Left(min(min(a.x(), b.x()), c.x()), min(min(a.y(), b.y()), c.y()), min(min(a.z(), b.z()), c.z()));
+        Vec3f Right(max(max(a.x(), b.x()), c.x()), max(max(a.y(), b.y()), c.y()), max(max(a.z(), b.z()), c.z()));
+        box = new BoundingBox(Left, Right); // exist later
     }
 
-    ~Triangle() {}
+    ~Triangle()
+    {
+        delete[] m;
+        m = nullptr;
+        delete[] box;
+        box = nullptr;
+    }
 
+    BoundingBox *getBoundingBox()
+    {
+        return box;
+    }
+    void insertIntoGrid(Grid *g, Matrix *m)
+    {
+        m_ = m;
+        Vec3f a_ = a, b_ = b, c_ = c;
+        if (m != NULL)
+        {
+            m_ = m;
+            m->Transform(a_);
+            m->Transform(b_);
+            m->Transform(c_);
+        }
+        Vec3f Left(min(min(a_.x(), b_.x()), c_.x()), min(min(a_.y(), b_.y()), c_.y()), min(min(a_.z(), b_.z()), c_.z()));
+        Vec3f Right(max(max(a_.x(), b_.x()), c_.x()), max(max(a_.y(), b_.y()), c_.y()), max(max(a_.z(), b_.z()), c_.z()));
+        Vec3f increment = g->getincrement_halfCell();
+        float x = increment.x(), y = increment.y(), z = increment.z();
+        Vec3f point;
+        for (int i = 0; i < g->nx; i++)
+        {
+            for (int j = 0; j < g->ny; j++)
+            {
+                for (int k = 0; k < g->nz; k++)
+                {
+                    point = g->getCenterPosition(i, j, k);
+
+                    if (point.x() >= Left.x() - x && point.y() >= Left.y() - y && point.z() >= Left.z() - z &&
+                        point.x() <= Right.x() + x && point.y() <= Right.y() + y && point.z() <= Right.z() + z)
+                    {
+                        // g->array[i][j][k] = true; // add+  no need to else false
+                        g->array_obj[i][j][k].addObject(this);
+                    }
+                }
+            }
+        }
+    }
     float det2(float a, float b,
                float c, float d)
     {

@@ -12,8 +12,21 @@ public:
           normal = n;
           d = dd;
           m = mat;
+          box = NULL;
      }
      ~Plane()
+     {
+          delete[] m;
+          m = nullptr;
+          delete[] box;
+          box = nullptr;
+     }
+     BoundingBox *getBoundingBox()
+     {
+          return box;
+     }
+
+     void insertIntoGrid(Grid *g, Matrix *m)
      {
      }
      bool intersect(const Ray &r, Hit &h, float tmin)

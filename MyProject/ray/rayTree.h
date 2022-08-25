@@ -8,6 +8,8 @@
 #include <OpenGL/gl.h>
 //#include <OpenGL/glu.h>
 //#include <GLUT/glut.h>
+#include "material.h"
+
 // ====================================================================
 // ====================================================================
 // data structure to store a segment
@@ -113,6 +115,111 @@ private:
 
 // ====================================================================
 // ====================================================================
+// data structure to store a cell face
+
+class CellFace
+{
+
+public:
+  // CONSTRUCTOR & DESTRUCTOR
+  CellFace() {}
+  CellFace(Vec3f _a, Vec3f _b, Vec3f _c, Vec3f _d, Vec3f _normal, Material *m)
+  {
+    a = _a;
+    b = _b;
+    c = _c;
+    d = _d;
+    normal = _normal;
+    material = m;
+  }
+  CellFace(const CellFace &f)
+  {
+    a = f.a;
+    b = f.b;
+    c = f.c;
+    d = f.d;
+    normal = f.normal;
+    material = f.material;
+  }
+  ~CellFace() {}
+
+  void paint()
+  {
+    material->glSetMaterial();
+    glNormal3f(normal.x(), normal.y(), normal.z());
+    glBegin(GL_QUADS);
+    glVertex3f(a.x(), a.y(), a.z());
+    glVertex3f(b.x(), b.y(), b.z());
+    glVertex3f(c.x(), c.y(), c.z());
+    glVertex3f(d.x(), d.y(), d.z());
+    glEnd();
+  }
+
+private:
+  // REPRESENTATION
+  Vec3f a;
+  Vec3f b;
+  Vec3f c;
+  Vec3f d;
+  Vec3f normal;
+  Material *material;
+};
+
+// ====================================================================
+// data structure to hold a variable number of cellFaces
+
+class CellFaceVector
+{
+
+public:
+  // CONSTRUCTOR & DESTRUCTOR
+  CellFaceVector()
+  {
+    num_cellFaces = 0;
+    size = 10;
+    cellFaces = new CellFace[size];
+  }
+  ~CellFaceVector() { delete[] cellFaces; }
+  void Clear() { num_cellFaces = 0; }
+
+  // ACCESSORS
+  int getNumCellFaces() { return num_cellFaces; }
+  CellFace getCellFace(int i)
+  {
+    assert(i >= 0 && i < num_cellFaces);
+    return cellFaces[i];
+  }
+
+  // MODIFIERS
+  void addCellFace(const CellFace &s)
+  {
+    if (size == num_cellFaces)
+    {
+      // double the size of the array and copy the pointers
+      int new_size = size * 2;
+      CellFace *new_cellFaces = new CellFace[new_size];
+      int i;
+      for (i = 0; i < size; i++)
+      {
+        new_cellFaces[i] = cellFaces[i];
+      }
+      delete[] cellFaces;
+      cellFaces = new_cellFaces;
+      size = new_size;
+    }
+    cellFaces[num_cellFaces] = s;
+    num_cellFaces++;
+  }
+
+private:
+  // REPRESENTATION
+  CellFace *cellFaces;
+  int size;
+  int num_cellFaces;
+};
+
+// ====================================================================
+// ====================================================================
 //
 // This class only contains static variables and static member
 // functions so there is no need to call the constructor, destructor
@@ -158,7 +265,23 @@ public:
     transmitted_segments.addSegment(Segment(ray, tstart, tstop));
   }
 
+  // when activated, visualize the ray grid marching
+  static void AddHitCellFace(Vec3f a, Vec3f b, Vec3f c, Vec3f d, Vec3f normal, Material *m)
+  {
+    if (!activated)
+      return;
+    hit_cells.addCellFace(CellFace(a, b, c, d, normal, m));
+  }
+  static void AddEnteredFace(Vec3f a, Vec3f b, Vec3f c, Vec3f d, Vec3f normal, Material *m)
+  {
+    if (!activated)
+      return;
+    entered_faces.addCellFace(CellFace(a, b, c, d, normal, m));
+  }
+
   static void paint();
+  static void paintHitCells();
+  static void paintEnteredFaces();
   static void Print();
 
 private:
@@ -170,6 +293,8 @@ private:
     shadow_segments.Clear();
     reflected_segments.Clear();
     transmitted_segments.Clear();
+    hit_cells.Clear();
+    entered_faces.Clear();
   }
 
   // REPRESENTATION
@@ -178,6 +303,9 @@ private:
   static SegmentVector shadow_segments;
   static SegmentVector reflected_segments;
   static SegmentVector transmitted_segments;
+
+  static CellFaceVector hit_cells;
+  static CellFaceVector entered_faces;
 };
 
 // ====================================================================
