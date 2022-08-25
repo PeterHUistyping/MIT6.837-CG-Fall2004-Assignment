@@ -93,6 +93,31 @@ On Main.C
 On raytrace.h  
     main loop raycasting has been transferred here.
 
+#### Assignment5: [Voxel Rendering]
+
+    Bounding boxes for Primitives
+    Sphere voxelization
+    Regular grid data structure
+    Grid::paint()-Two Ways to previsualize
+    Fast ray-grid intersection
+    Transformation:Flatten the Transformation Hierarchy
+
+A glimpse of it ⬇
+![Sphere](MyProject/assignment5_Voxel-Rendering/5_1.png)
+![Sphere+](MyProject/assignment5_Voxel-Rendering/5_2.png)
+![Visualization](MyProject/assignment5_Voxel-Rendering/5_3.png)
+![Stanford Rabbit](MyProject/assignment5_Voxel-Rendering/5_4.png)
+
+Updated: extern.h
+
+Using Ray-Box Intersection From Ray Casting II
+
+Guidance: a single ray is traced by pressing the 't' key. \
+Then the 'g' key will toggle between\ 
+    (1) visualizing all occupied grid cells
+    (2) visualizing the cells traversed while walking along the ray
+    & (3) the faces crossed to enter each cell along the ray.
+ 
 ## Setup the MyProject
 *Notice that .C = .cpp (at least in VScode)
 
