@@ -117,7 +117,21 @@ Then the 'g' key will toggle between\
     (1) visualizing all occupied grid cells
     (2) visualizing the cells traversed while walking along the ray
     & (3) the faces crossed to enter each cell along the ray.
- 
+
+#### Assignment6: [Grid Acceleration & Solid Textures]
+    
+    RAY TRACING STATISTICS
+    Grid Acceleration 
+    Solid Textures 
+    CheckerBoard, Perlin Noise, Wood, etc
+
+A glimpse of it ⬇
+![Texture](MyProject/assignment6_Grid-Acceleration+Solid-Textures/Texture.png)
+
+Tips: All related line-arguments should be declared
+*Adjustment:
+    delete box;  //no []
+    pixel->width, height
 ## Setup the MyProject
 *Notice that .C = .cpp (at least in VScode)
 

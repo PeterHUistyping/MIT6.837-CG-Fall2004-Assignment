@@ -1,0 +1,58 @@
+{
+    "configurations": [
+        {
+            "name": "C/C++: clang++ build and debug active file",
+            "type": "cppdbg",
+            "request": "launch",
+            "program": "${fileDirname}/${fileBasenameNoExtension}",
+            "args": [ //assignment1
+                "-input",
+                //"in/scene5_01_sphere.txt",
+                //"in/scene5_02_spheres.txt",
+                //"in/scene5_03_offcenter_spheres.txt",
+                //"in/scene5_04_plane_test.txt",
+                //"in/scene5_05_sphere_triangles.txt",
+                //"in/scene5_09_bunny_mesh_40k.txt",
+                //"in/scene5_10_scale_translate.txt",
+                //"in/scene5_11_rotated_triangles.txt",
+                "in/scene5_12_nested_transformations.txt",
+                "-size",
+                "200",
+                "200",
+                "-output",
+                "out/output5_12.tga",
+                "-grid",
+                "15",
+                "15",
+                "15",
+                "-visualize_grid",
+                //"-shadows",
+                //"-bounces",
+                //"5",
+                //"-weight",
+                //"0.01",
+                "-gui", //OpenGL viewer
+                "-gouraud", //sphere argu
+                "-tessellation",
+                "60",
+                "30",
+                "-shade_back",
+                //"-normals",
+                //"out/normals4_04.tga",
+                //"-depth",
+                //"2",
+                //"7",
+                //"8",
+                //"20",
+                //"out/depth4_04.tga",
+            ],
+            "stopAtEntry": false,
+            "cwd": "${fileDirname}",
+            "environment": [],
+            "externalConsole": false,
+            "MIMode": "lldb",
+            "preLaunchTask": "C/C++: clang++ build active file"
+        }
+    ],
+    "version": "2.0.0"
+}
