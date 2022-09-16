@@ -306,10 +306,10 @@ int main(int argc, char *argv[])
     }
     SceneParser pa(input_file);
     parser = &pa;
-    Grid gr(parser->getGroup()->getBoundingBox(), nx, ny, nz);
 
     if (nx != 0)
     {
+        Grid gr(parser->getGroup()->getBoundingBox(), nx, ny, nz);
         grid = &gr;
     }
 

@@ -10,6 +10,11 @@ The folder includes the following, which are downloaded from the Course website\
 *1.Lecture Note*\
 *2.Original Assignments, including PDF task requirement and supporting code.*
 
+## About this Assignment
+With the help of the Open Course, I have the experience of writing a ray tracer using C++, including ray casting, rendering, normal visualization, supersampling and 3D OpenGL visualization. It is also a part of MIT6.837 assignment.   
+Throughout the process, I implement two kinds of cameras, orthonormal and perspective camera respectively. In addition, several types of primitive objectives are built, e.g. sphere, triangle, plane, triangle mesh, just to name a few. Even though there is plenty of obstacle finishing the task (like the use of depreciated GLUT library), lots of interesting things are learnt.  
+Folder .vscode(i.e., settings.json, launch.json, tasks,json and c_cpp_properties.json) helps build and compile the C++ program. What's special is that it also keeps Vscode occupying tiny amount of space on PC compared with other IDE. Command-line could help build the project efficiently.   
+
 ## Project Introduction
 #### Assignment0: [**Very Interesting!**]
 
@@ -132,6 +137,13 @@ Tips: All related line-arguments should be declared
 *Adjustment:
     delete box;  //no []
     pixel->width, height
+
+#### Assignment7: [Supersampling & Antialiasing]
+    
+    new Class Film, Sample
+    
+
+
 ## Setup the MyProject
 *Notice that .C = .cpp (at least in VScode)
 
