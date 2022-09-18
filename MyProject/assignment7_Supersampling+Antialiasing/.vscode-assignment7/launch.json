@@ -1,0 +1,75 @@
+{
+    "configurations": [
+        {
+            "name": "C/C++: clang++ build and debug active file",
+            "type": "cppdbg",
+            "request": "launch",
+            "program": "${fileDirname}/${fileBasenameNoExtension}",
+            "args": [ //assignment1
+                "-input",
+                //"in/scene7_01_sphere_triangle.txt",
+                //"in/scene7_02_checkerboard.txt",
+                "in/scene7_03_marble_vase.txt",
+                // "in/scene7_06_faceted_gem.txt",
+                //"in/",
+                "-size",
+                "200",
+                "200",
+                //"-render_samples",
+                ///"-render_filter",
+                //"out/samples7_01h-jittered_samples.tga",
+                //"out/filter7_01d.tga",
+                //"20",
+                //"out/samples7_01a_low_res.tga",
+                //"-random_samples",
+                //"-uniform_samples",
+                "-jittered_samples",
+                "36",
+                //"-box_filter",
+                //"-tent_filter",
+                "-gaussian_filter",
+                "0.4",
+                //"1.7", //"2.3",
+                "-output",
+                "out/output7_03b.tga",
+                //"out/samples7_01b_low_res.tga",
+                //"-stats",
+                "-shadows",
+                // "-shade_back",
+                //"-gui", //OpenGL viewer
+                //-------------------------//
+                "-grid",
+                "15",
+                "30",
+                "15",
+                //"-visualize_grid",
+                //-------------------------//
+                /*"-bounces",
+                "5",
+                "-weight",
+                "0.01",
+                //-------------------------//*/
+                /*"-gouraud", //sphere argu
+                "-tessellation",
+                "60",
+                "30",
+                //-------------------------//*/
+                /*"-normals",
+                "out/normals4_04.tga",*/
+                /* "-depth",
+                "2",
+                "7",
+                "8",
+                "20",
+                "out/depth4_04.tga",*/
+            ],
+            "stopAtEntry": false,
+            "cwd": "${fileDirname}",
+            "environment": [],
+            "externalConsole": false,
+            "MIMode": "lldb",
+            "preLaunchTask": "C/C++: clang++ build active file"
+        }
+    ],
+    "version": "2.0.0"
+}

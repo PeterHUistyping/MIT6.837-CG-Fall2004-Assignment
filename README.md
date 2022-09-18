@@ -11,8 +11,9 @@ The folder includes the following, which are downloaded from the Course website\
 *2.Original Assignments, including PDF task requirement and supporting code.*
 
 ## About this Assignment
-With the help of the Open Course, I have the experience of writing a ray tracer using C++, including ray casting, rendering, normal visualization, supersampling and 3D OpenGL visualization. It is also a part of MIT6.837 assignment.   
-Throughout the process, I implement two kinds of cameras, orthonormal and perspective camera respectively. In addition, several types of primitive objectives are built, e.g. sphere, triangle, plane, triangle mesh, just to name a few. Even though there is plenty of obstacle finishing the task (like the use of depreciated GLUT library), lots of interesting things are learnt.  
+With the help of the Open Course, I have the experience of writing a ray tracer using C++, including ray casting, normal visualization, rendering, voxel rendering, supersampling and 3D OpenGL visualization. It is also a part of MIT6.837 assignment.   
+Throughout the process, I implement two kinds of cameras, orthonormal and perspective camera respectively. In addition, several types of primitive objectives are built, e.g. sphere, triangle, plane, triangle mesh, just to name a few. Several Light effect is implemented.   
+Even though there is plenty of obstacle finishing the task (like the use of depreciated GLUT library), lots of interesting things are learnt.  
 Folder .vscode(i.e., settings.json, launch.json, tasks,json and c_cpp_properties.json) helps build and compile the C++ program. What's special is that it also keeps Vscode occupying tiny amount of space on PC compared with other IDE. Command-line could help build the project efficiently.   
 
 ## Project Introduction
@@ -125,24 +126,36 @@ Then the 'g' key will toggle between\
 
 #### Assignment6: [Grid Acceleration & Solid Textures]
     
-    RAY TRACING STATISTICS
-    Grid Acceleration 
-    Solid Textures 
-    CheckerBoard, Perlin Noise, Wood, etc
+    RAY TRACING STATISTICS  
+    Grid Acceleration   
+    Solid Textures  
+    CheckerBoard, Perlin Noise, Wood, etc  
 
-A glimpse of it ⬇
+A glimpse of it ⬇  
 ![Texture](MyProject/assignment6_Grid-Acceleration+Solid-Textures/Texture.png)
 
-Tips: All related line-arguments should be declared
+Tips: All related line-arguments should be declared  
+(No longer in Assignment 7 Fixed by removing ~ delete m on Grid and Object3D class)  
 *Adjustment:
     delete box;  //no []
     pixel->width, height
 
 #### Assignment7: [Supersampling & Antialiasing]
     
-    new Class Film, Sample
+    Several new base and derived Class  
+    Class Film, Sample  
+    Class Sampler: - random/uniform/jittered samples  
+    Class Filter: -box/tent/gaussian filter  
+    Reference: Fundamentals of computer graphics-(2009)  Ch9 SignalProcessing  
     
+A glimpse of it ⬇
+![Supersampling](MyProject/assignment7_Supersampling+Antialiasing/Supersampling.png)
+![Antialiasing](MyProject/assignment7_Supersampling+Antialiasing/Antialiasing.png)
 
+*Adjustment:  
+    Revise use of grid and visualize_grid  
+    Tips: All related line-arguments should be declared  
+(No longer in Assignment 7 Fixed by removing ~ delete m on Grid and Object3D class)  
 
 ## Setup the MyProject
 *Notice that .C = .cpp (at least in VScode)

@@ -10,6 +10,9 @@
 #include "glCanvas.h"
 #include "raytracer.h"
 #include "boundingbox.h"
+#include "film.h"
+#include "sampler.h"
+#include "filter.h"
 Vec4f &operator*=(Vec4f &v, Matrix &m)
 { // supplement
     float x = v.x(), y = v.y(), z = v.z(), w = v.w(), a, b, c, d;
@@ -53,6 +56,17 @@ float epsilon_shadow = 1e-5;
 float epsilon = 1e-5; // reflection &refraction
 bool debug = false;
 bool stats = false;
+char *samples_file = NULL;
+int samples_zoom = 0;
+char *filter_file = NULL;
+int filter_zoom = 0;
+bool random_samples = false, uniform_samples = false, jittered_samples = false;
+int num_samples = 0;
+bool box_filter = false, tent_filter = false, gaussian_filter = false;
+bool render_filter = false, render_samples = false;
+float num_filter = 0;
+Sampler *sampler = new UniformSampler(num_samples); // default
+Filter *filter = nullptr;
 void RayCasting()
 {
     Vec3f Black(0, 0, 0);
@@ -65,18 +79,7 @@ void RayCasting()
     Vec2f p;
     int flag = 0; // debug
 
-    float i = 0.25 * width, j = 0.23 * height; // debugging
-    p.Set(i / width, j / height);
-    Hit h;
-    if (parser->getGroup()->intersect(parser->getCamera()->generateRay(p), h, parser->getCamera()->getTMin()))
-    {
-        flag++;
-        image.SetPixel(width * i / width, height * j / height, h.getMaterial()->getDiffuseColor());
-        if (h.getT() >= depth_min && h.getT() <= depth_max)
-            imageDepth.SetPixel(width * i / width, height * j / height, h.getMaterial()->getDiffuseColor());
-    }
-
-    for (float i = 0; i < width; i++) // load the camera (0,0)->(1,1) 64*64 Generate Points on the sceen coordinate
+    for (float i = 0; i < width; i++) // load the camera (0,0)->(1,1) width*height Generate Points on the sceen coordinate
     {
         for (float j = 0; j < height; j++)
         {
@@ -84,7 +87,7 @@ void RayCasting()
             Hit h;
             if (parser->getGroup()->intersect(parser->getCamera()->generateRay(p), h, parser->getCamera()->getTMin()))
             {
-                image.SetPixel(width * i / width, height * j / height, h.getMaterial()->getDiffuseColor());
+                image.SetPixel(i, j, h.getMaterial()->getDiffuseColor());
                 Vec3f color;
                 float min = 0, max = 1; // depth
                 if (h.getT() >= depth_min && h.getT() <= depth_max)
@@ -98,7 +101,7 @@ void RayCasting()
                 else if (h.getT() < depth_min)
                     color.Set(max, max, max);
 
-                imageDepth.SetPixel(width * i / width, height * j / height, color);
+                imageDepth.SetPixel(i, j, color);
             }
         }
     }
@@ -127,7 +130,7 @@ void NormalVisualization()
                 float min = 0, max = 1; // depth
                 assert(fabs(normal.Length() - 1) < 1e-6);
                 Vec3f Normalabs(fabs(normal.x()), fabs(normal.y()), fabs(normal.z())); // absolute value
-                imageNormal.SetPixel(width * i / width, height * j / height, Normalabs);
+                imageNormal.SetPixel(i, j, Normalabs);
             }
         }
     }
@@ -143,34 +146,21 @@ void traceRayFunction(float x, float y)
     Vec3f pcolor = ray_tracer->traceRay(ray, epsilon, 0, 1, 0, h);
 }
 
+// STORE in IMAGE
 void Rendering()
 {
     Image image(width, height); // image.SetAllPixels(parser->getBackgroundColor());
-    Vec2f p;                    //(0,0)->(1,1) 1024*1024 Generate Points on the sceen coordinate
+    Vec2f p;                    //(0,0)->(1,1) width*height Generate Points on the sceen coordinate
     Vec3f pcolor;
     Ray ray;
     if (grid != NULL)
     {
-        RayTracingStats::Initialize(width, height, grid->getBoundingBox(),
-                                    nx, ny, nz);
+        RayTracingStats::Initialize(width, height, grid->getBoundingBox(), nx, ny, nz);
     }
     else
     {
-        RayTracingStats::Initialize(width, height, NULL,
-                                    nx, ny, nz);
+        RayTracingStats::Initialize(width, height, NULL, nx, ny, nz);
     }
-
-    //-------------------
-    /*
-        float i, j;
-        i = 1, j = 1;
-        p.Set(i / width, j / height); // Ray - generateRay(p)  //~Camera
-        Hit h;
-        ray = parser->getCamera()->generateRay(p);
-        pcolor += ray_tracer->traceRay(ray, epsilon, 0, 1, 0, h);
-        image.SetPixel(width * i / width, height * j /height, pcolor);
-      */
-    //-------------------
 
     for (float i = 0; i < width; i++)
     { // load the camera
@@ -181,7 +171,7 @@ void Rendering()
             Hit h;
             ray = parser->getCamera()->generateRay(p);
             pcolor += ray_tracer->traceRay(ray, epsilon, 0, 1, 0, h);
-            image.SetPixel(width * i / width, height * j / height, pcolor);
+            image.SetPixel(i, j, pcolor);
         }
     }
     if (stats)
@@ -190,6 +180,72 @@ void Rendering()
     }
 
     image.SaveTGA(output_file);
+}
+
+// STORE in FILM
+void Supersampling()
+{
+    Film film(width, height, num_samples);
+    Image image(width, height);
+    Vec2f p, p2;
+    Vec3f pcolor;
+    Ray ray;
+    if (grid != NULL)
+    {
+        RayTracingStats::Initialize(width, height, grid->getBoundingBox(), nx, ny, nz);
+    }
+    else
+    {
+        RayTracingStats::Initialize(width, height, NULL, nx, ny, nz);
+    }
+    for (float i = 0; i < width; i++)
+    { // load the camera
+        for (float j = 0; j < height; j++)
+        {
+            for (int k = 0; k < num_samples; k++)
+            {
+                pcolor.Set(0, 0, 0);
+                p2.Set(i, j);
+                p = sampler->getSamplePosition(k); // Ray - generateRay(p)  //~Camera
+                p2 += p;
+                p2.Set(p2.x() / width, p2.y() / height);
+                Hit h;
+                ray = parser->getCamera()->generateRay(p2);
+                pcolor += ray_tracer->traceRay(ray, epsilon, 0, 1, 0, h);
+                film.setSample(i, j, k, p, pcolor);
+            }
+        }
+    }
+    if (stats)
+    {
+        RayTracingStats::PrintStatistics();
+    }
+    if (render_samples)
+    {
+        film.renderSamples(samples_file, samples_zoom);
+    }
+    else if (render_filter)
+    {
+        film.renderFilter(filter_file, filter_zoom, filter);
+    }
+    else
+    {
+        if (filter != nullptr)
+        {
+            for (float i = 0; i < width; i++)
+            { // load the camera
+                for (float j = 0; j < height; j++)
+                {
+                    image.SetPixel(i, j, filter->getColor(i, j, &film));
+                }
+            }
+            image.SaveTGA(output_file);
+        }
+        else
+        {
+            Rendering();
+        }
+    }
 }
 
 int main(int argc, char *argv[])
@@ -298,6 +354,75 @@ int main(int argc, char *argv[])
         {
             stats = true;
         }
+        else if (!strcmp(argv[i], "-render_samples"))
+        {
+            i++;
+            assert(i < argc);
+            samples_file = argv[i];
+            i++;
+            assert(i < argc);
+            samples_zoom = atoi(argv[i]);
+            render_samples = true;
+        }
+        else if (!strcmp(argv[i], "-render_filter"))
+        {
+            i++;
+            assert(i < argc);
+            filter_file = argv[i];
+            i++;
+            assert(i < argc);
+            filter_zoom = atoi(argv[i]);
+            render_filter = true;
+        }
+        else if (!strcmp(argv[i], "-random_samples"))
+        {
+            i++;
+            assert(i < argc);
+            num_samples = atoi(argv[i]);
+            random_samples = true;
+            sampler = new RandomSampler(num_samples);
+        }
+        else if (!strcmp(argv[i], "-uniform_samples"))
+        {
+            i++;
+            assert(i < argc);
+            num_samples = atoi(argv[i]);
+            uniform_samples = true;
+            sampler = new UniformSampler(num_samples);
+        }
+        else if (!strcmp(argv[i], "-jittered_samples"))
+        {
+            i++;
+            assert(i < argc);
+            num_samples = atoi(argv[i]);
+            jittered_samples = true;
+            sampler = new JitteredSampler(num_samples);
+        }
+
+        else if (!strcmp(argv[i], "-box_filter"))
+        {
+            i++;
+            assert(i < argc);
+            num_filter = atof(argv[i]);
+            box_filter = true;
+            filter = new BoxFilter(num_filter);
+        }
+        else if (!strcmp(argv[i], "-tent_filter"))
+        {
+            i++;
+            assert(i < argc);
+            num_filter = atof(argv[i]);
+            tent_filter = true;
+            filter = new TentFilter(num_filter);
+        }
+        else if (!strcmp(argv[i], "-gaussian_filter"))
+        {
+            i++;
+            assert(i < argc);
+            num_filter = atof(argv[i]);
+            gaussian_filter = true;
+            filter = new GaussianFilter(num_filter);
+        }
         else
         {
             printf("whoops error with command line argument %d: '%s'\n", i, argv[i]);
@@ -306,7 +431,6 @@ int main(int argc, char *argv[])
     }
     SceneParser pa(input_file);
     parser = &pa;
-
     Grid gr(parser->getGroup()->getBoundingBox(), nx, ny, nz);
     if (nx != 0)
     {
@@ -323,7 +447,14 @@ int main(int argc, char *argv[])
         RayCasting();
     if (is_normal)
         NormalVisualization();
-    Rendering();
+    // Rendering();
+    if (!random_samples && !uniform_samples && !jittered_samples)
+    {
+        uniform_samples = true; // default
+        num_samples = 1;
+        samples_file = output_file;
+    }
+    Supersampling();
 
     if (gui)
     {
