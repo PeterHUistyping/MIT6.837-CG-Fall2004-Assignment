@@ -5,20 +5,23 @@
             "label": "C/C++: clang++ build active file",
             "command": "/usr/bin/clang++",
             "args": [ //assignment1
+                "-std=c++17",
                 "-fdiagnostics-color=always",
                 "-g",
                 "${file}",
                 "${fileDirname}/../lib/*.C",
-                "${fileDirname}/../ray/*.C",
+                "${workspaceFolder}/ray/*.C",
+                "${workspaceFolder}/Sampling_Filter/*.C",
                 "${fileDirname}/glCanvas.C",
                 "${fileDirname}/scene_parser.C",
                 //"${workspaceFolder}/*.C",  //fail:no such file
                 //"${fileDirname}/ifs.C",    //assignment0
                 "-I",
-                "${workspaceFolder}/assignment6_Grid-Acceleration+Solid-Textures", //change accordingly
+                "${workspaceFolder}/assignment7_Supersampling+Antialiasing", //change accordingly
                 "-I",
                 "${workspaceFolder}/ray",
                 "-I'${workspaceFolder}/lib'", //header file
+                "-I'${workspaceFolder}/Sampling_Filter'",
                 "-I",
                 "${workspaceFolder}/Object3D",
                 "-framework",
