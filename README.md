@@ -157,6 +157,10 @@ A glimpse of it ⬇
     Tips: All related line-arguments should be declared  
 (No longer in Assignment 7 Fixed by removing ~ delete m on Grid and Object3D class)  
 
+#### Assignment8: [Curves & Surfaces]
+    
+     A NEW Chapter
+    
 ## Setup the MyProject
 *Notice that .C = .cpp (at least in VScode)
 
